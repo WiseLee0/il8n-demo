@@ -1,19 +1,28 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img alt="Vue logo" src="./assets/logo.png" />
+    <Profile />
+    <afile />
+    <zfile />
+    <noTag />
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Profile from "./components/Profile.vue";
+import afile from "./views/afile/index.vue";
+import zfile from "./views/x/y/z/zfile.vue";
+import noTag from "./views/noTag/notag.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    Profile,
+    afile,
+    zfile,
+    noTag,
+  },
+};
 </script>
 
 <style>
