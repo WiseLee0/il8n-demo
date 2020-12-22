@@ -1,8 +1,11 @@
+/* eslint-disable quotes */
+/* eslint-disable no-cond-assign */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-escape */
 const fs = require("fs");
 const path = require("path");
 const promisify = require("util").promisify;
+
 const readdir = AsyncFn(fs.readdir);
 const stat = AsyncFn(fs.stat);
 const open = promisify(fs.open);
@@ -14,7 +17,7 @@ function compose(...fns) {
   return fns.reduce((a, b) => (...args) => a(b(...args)));
 }
 function AsyncFn(fn) {
-  return function (...args) {
+  return function(...args) {
     return new Promise((resolve, reject) => {
       const hookFn = (err, result) => {
         if (err) reject(err);
@@ -298,11 +301,12 @@ function generateConfigDir(rootDirName, languageCategory) {
 // 生成配置入口文件
 function generateConfigEntry(configEntryFileName) {
   return ({ configDirMap, relatives, languageCategory, rootDirName }) => {
-    relatives = relatives.map((r) => r.split("\\").join("-"));
+    const keys = relatives.map((r) => r.split("\\").join("-"));
+    const values = relatives.map((r) => r.split("\\").join("/"));
     let entryObj = {};
-    for (let i = 0; i < relatives.length; i++) {
-      const key = relatives[i];
-      const val = key.split("-").join("/");
+    for (let i = 0; i < keys.length; i++) {
+      const key = keys[i];
+      const val = values[i];
       entryObj[key] = `require('./${val}.js')`;
     }
     entryObj = JSON.stringify(entryObj, null, " ");
