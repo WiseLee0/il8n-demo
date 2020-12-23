@@ -15,11 +15,15 @@
         </div>
       </div>
     </div>
-    <div define-attr="自定义属性"></div>
+    <div define-attr="自定义属性">自定义属性</div>
+    <div>~English text translation~</div>
+    <input type="text" placeholder="~please input~" />
+    <span define-attr="~hello~">~world~</span>
     <span>
       换行文本换行文本换行文本换行文本换行文本
       换行文本换行文本换行文本换行文本换行文本换行文本换行文本
     </span>
+    <span>自定义属性</span>
   </div>
 </template>
 

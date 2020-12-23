@@ -39,9 +39,11 @@ function* initGenerator(count, fn = (param) => param) {
 function matchReg(name = "chinese") {
   switch (name) {
     case "chinese":
-      return /(([\u4e00-\u9fa5].*[\u4e00-\u9fa5])|[\u4e00-\u9fa5])/g;
+      return /[\u4e00-\u9fa5]+/g;
+    case "~english":
+      return /\~.*?\~/g;
     default:
-      return null;
+      return name;
   }
 }
 
@@ -124,7 +126,7 @@ function attrReplace(matchPattern, partMatch) {
 // 内容匹配
 function matchContent(partMatch) {
   return ({ vueFiles, fnPattern, il8nReverseMap }) => {
-    const reg = eval("/[\\s\\>]" + partMatch + "[\\s\\<]/g");
+    const reg = eval("/[\\s\\>](" + partMatch + ")[\\s\\<]/g");
     let content = null;
     const contents = [];
     while ((content = reg.exec(vueFiles)) != null) {
@@ -374,16 +376,17 @@ async function handleVueFile(il8nFileDir, callback) {
 }
 
 function _insertNote(file, il8nReverseMap) {
-  let tempFile = file;
   for (const map of il8nReverseMap) {
     let content = [];
-    const reg = eval("/\\((\\'.*" + map[1] + ".*\\')\\)/g");
+    const reg = eval("/[^\\\\']*?" + map[1] + "[^\\\\']*?/g");
     while ((content = reg.exec(file)) != null) {
-      const note = `(${content[1]}, '${map[0]}')`;
-      tempFile = tempFile.replace(content[0], note);
+      const origin = `'${content[0]}'`;
+      const note = `'$%%#${content[0]}$%%#', '${map[0]}'`;
+      file = file.replace(origin, note);
     }
   }
-  return tempFile;
+  file = file.replace(/\$%%#/g, "");
+  return file;
 }
 
 // 添加语言映射注释
